@@ -1,0 +1,2 @@
+1;Rossi;Luca;03422547451;data@pippa.it
+2;Bianchi;Andrea;03422587451;info@pippo.it
