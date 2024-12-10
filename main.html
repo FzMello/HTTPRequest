@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comuni per Provincia</title>
+	<style>
+		#scelta{
+			display: flex;
+		}
+	</style>
+</head>
+<body>
+	<div id="scelta">
+		<h3>Seleziona una provincia:</h3>
+		<select id="SEL">
+			<option value="">Scegli una provincia</option>
+		</select>
+		<input type="button" value="CERCA" onclick="leggiDati()">
+	</div>
+    
+    <div id="d1"></div>
+    <script>
+        window.onload = function() {
+            var request = new XMLHttpRequest();
+            var params = "";
+            request.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var province = this.responseText.split("\n");
+                    var select = document.getElementById("SEL");
+                    for (var i = 0; i < province.length; i++) {
+                        var option = document.createElement("option");
+                        option.value = province[i];
+                        option.textContent = province[i];
+                        select.appendChild(option);
+                    }
+                }
+            };
+            request.open('GET', 'http://localhost/leggifileProvincie.php', true);
+            request.send(params);
+        };
+
+        function leggiDati() {
+			document.getElementById("scelta").style.display = "none";
+            var select = document.getElementById("SEL");
+            var provincia = select.value;
+            if (provincia !== "") {
+                var request = new XMLHttpRequest();
+                var params = "provincia=" + encodeURIComponent(provincia);
+                request.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("d1").innerHTML = this.responseText;
+                    }
+                };
+                request.open('POST', 'http://localhost/leggifileComuni.php', true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                request.send(params);
+            } else {
+                document.getElementById("d1").innerHTML = "Seleziona una provincia.";
+            }
+        }
+    </script>
+
+</body>
+</html>
